@@ -13,6 +13,8 @@ const JWT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic3R1ZGVudCIs
 // Your UQ student username, used for row-level security to retrieve your records
 const USERNAME = "s4395021";
 
+const range = (i) => Array.from(Array(i).keys());
+
 /**
  * Helper function to handle API requests.
  * It sets the Authorization token and optionally includes the request body.
@@ -80,15 +82,15 @@ async function updateForm(id, form)
     return res.json();
 }
 
-async function createQuestion(question)
+async function createField(field)
 {
-    const res = await apiRequest("/question", "POST", question);
+    const res = await apiRequest("/field", "POST", field);
     return res.json();
 }
 
-async function updateQuestion(id, question)
+async function updateField(id, field)
 {
-    const res = await apiRequest(`/question?id=eq.${id}`, "PATCH", question);
+    const res = await apiRequest(`/field?id=eq.${id}`, "PATCH", field);
     return res.json();
 }
 
@@ -125,7 +127,7 @@ function getID(idPromptStr)
 function getBoolData(promptStr, defVal)
 {
     const res = getTextData(promptStr, defVal);
-    return (res === "true");
+    return (res === "true" || res === true);
 }
 
 function getIntData(promptStr, defVal)
@@ -145,32 +147,102 @@ async function makeForm()
     return;
 }
 
-function getQText(defVal)
+function makeEditFieldHelper(curField)
 {
-    return prompt(`Question Text: (${defVal}) `, defVal);
+    const getFieldType = function(defVal)
+    {
+        const curOpt = ((d) => {
+            switch (d) {
+		case "multiline":
+                    return '2';
+		case "dropdown":
+                    return '3';
+		case "location":
+                    return '4';
+		case "text":
+                default:
+                    return '1';
+            }
+        })(defVal);
+        const typePrompt = "Field data type:\n" +
+                "1 - text\n" +
+                "2 - multiline\n" +
+                "3 - dropdown\n" +
+                "4 - location";
+	console.log(typePrompt);
+	const opt = prompt(`selection? (default ${curOpt}) `, curOpt);
+        switch(opt) {
+            case '2':
+                return "multiline";
+            case '3':
+                return "dropdown";
+            case '4':
+                return "location";
+            case '1':
+            default:
+                return "text";
+        }
+    };
+    const getDDOptions = function()
+    {
+        console.log("Creating dropdown.");
+        const numOpts = getIntData("How many options? ", "1");
+        const dropDowns = range(numOpts).map((e) => getTextData(`Option ${e}? `, `${e}`));
+	return dropDowns;
+    };
+    if (!curField) { // creating new field
+        const nuName = getTextData("Field name", "Foo");
+        const nuType = getFieldType("text");
+        const nuOpts = (nuType === "dropdown") ? getDDOptions() : null;
+        const isReqd = getBoolData("Required field [true | false]?", true);
+        const isNum = getBoolData("Is numeric [true | false]?", false);
+        const ordIdx = getIntData("Order index", 1);
+	//const nuFld =
+        return {
+            name: nuName,
+            field_type: nuType,
+            options: nuOpts,
+            required: isReqd,
+            is_num: isNum,
+            order_index: ordIdx
+        };
+        //return (!nuOpts) ? nuFld : {...nuFld, options: nuOpts};
+    }
+    else { // editing
+        const nuName = getTextData("Field name", curField.name);
+        const nuType = getFieldType(curField.field_type);
+        const nuOpts = (nuType === "dropdown") ? getDDOptions() : null;
+        const isReqd = getBoolData("Required field [true | false]?", curField.required);
+        const isNum = getBoolData("Is numeric [true | false]?", curField.is_num);
+        const ordIdx = getIntData("Order index", curField.order_index);
+        return {
+            name: nuName,
+            field_type: nuType,
+            options: nuOpts,
+            required: isReqd,
+            is_num: isNum,
+            order_index: ordIdx
+        };
+        //return (!nuOpts) ? nuFld : {...nuFld, options: nuOpts};
+    }
 }
 
-function getDifficulty(defVal)
+async function makeField()
 {
-    return prompt(`Difficulty: (${defVal}) `, defVal);
-}
-
-async function makeQuestion()
-{
-    console.log("Create new question");
-    const intIdStr = getIntID();
-    if (intIdStr === "") {
+    console.log("Create new field");
+    const fIdStr = getID("Form ID");
+    if (fIdStr === "") {
         console.log("No interview ID specified");
         return;
     }
     else {
-        const intId = Number(intIdStr);
-        const res = await createQuestion({
-            interview_id: intId,
-            question: getQText("FizzBuzz?"),
-            difficulty: getDifficulty("Easy")
+        const fId = Number(fIdStr);
+	const nuField = makeEditFieldHelper(null);
+        const res = await createField({
+            form_id: fId,
+            ...nuField
         });
-        console.log("Created Question: ", res);
+        console.log("Created Field: ", res);
     }
 }
 
@@ -249,18 +321,18 @@ async function deleteForm()
     }
 }
 
-async function deleteQuestion()
+async function deleteField()
 {
-    console.log("Delete question");
-    const idStr = getQID();
+    console.log("Delete field");
+    const idStr = getID("Field ID");
     if (idStr === "") {
         console.log("No ID specified");
         return;
     }
     else {
         const id = Number(idStr);
-        const res = await apiRequest(`/question?id=eq.${id}`, "DELETE");
-        console.log("Deleted question", res);
+        const res = await apiRequest(`/field?id=eq.${id}`, "DELETE");
+        console.log("Deleted field", res);
         return;
     }
 }
@@ -318,44 +390,44 @@ async function listForms()
     console.log(res);
 }
 
-async function getQuestions(intId)
+async function getFields(fId)
 {
-    const res = await apiRequest(`/question?interview_id=eq.${intId}`);
+    const res = await apiRequest(`/field?form_id=eq.${fId}`);
     return res.json();
 }
 
-async function getQuestion(id)
+async function getField(id)
 {
-    const res = await apiRequest(`/question?id=eq.${id}`);
-    return res.json();
+    const res = await apiRequest(`/field?id=eq.${id}`);
+    return res.json().then(r => r[0]);
 }
 
-async function getQCount()
+async function getFieldCount()
 {
-    const intIdStr = getIntID();
-    if (intIdStr === "") {
-        console.log("No Interview ID specified");
+    const fIdStr = getID("Form ID");
+    if (fIdStr === "") {
+        console.log("No Form ID specified");
         return;
     }
     else {
-        const intId = Number(intIdStr);
-        const res = await apiRequest(`/question?interview_id=eq.${intId}&limit=0`);
+        const fId = Number(fIdStr);
+        const res = await apiRequest(`/field?form_id=eq.${fId}&limit=0`);
         console.log("Result: ", res.headers.get("content-range").replace(/\*\//, ""));
     }
 }
 
-async function listQuestions()
+async function listFields()
 {
-    console.log("List questions");
-    const intIdStr = getIntID();
-    if (intIdStr === "") {
-        console.log("No Interview ID specified");
+    console.log("List fields");
+    const fIdStr = getID("Form ID");
+    if (fIdStr === "") {
+        console.log("No Form ID specified");
         return;
     }
     else {
-        const intId = Number(intIdStr);
-        const res = await getQuestions(intId);
-        console.log(`Questions for interview ${intId}:`, res);
+        const fId = Number(fIdStr);
+        const res = await getFields(fId);
+        console.log(`Fields for form ${fId}:`, res);
     }
 }
 
@@ -368,7 +440,7 @@ async function getApplicants(intId)
 async function getApplicant(id)
 {
     const res = await apiRequest(`/applicant?id=eq.${id}`);
-    return res.json();
+    return res.json().then(r => r[0]);
 }
 
 async function getAppCount()
@@ -458,23 +530,20 @@ async function editForm()
     }
 }
 
-async function editQuestion()
+async function editField()
 {
-    console.log("Edit question");
-    const idStr = getQID();
+    console.log("Edit field");
+    const idStr = getID("Field ID");
     if (idStr === "") {
         console.log("No ID specified");
         return;
     }
     else {
         const id = Number(idStr);
-        const queryRes = await getQuestion(id).then(r => r[0]);
-        console.log("Current question: ", queryRes);
-        const res = await updateQuestion(id, {
-            question: getQText(queryRes.question),
-            difficulty: getDifficulty(queryRes.difficulty)
-        });
-        console.log("Updated question:", res);
+        const queryRes = await getField(id);
+        console.log("Current field: ", queryRes);
+        const res = await updateField(id, makeEditFieldHelper(queryRes));
+        console.log("Updated field:", res);
         return;
     }
 }
@@ -547,25 +616,33 @@ async function main()
                 case "cf":
                     await makeForm();
                     break;
+                case "cc":
+                    await makeField();
+                    break;
                 case "ef":
                     await editForm();
+                    break;
+                case "ec":
+                    await editField();
                     break;
                 case "lf":
                     await listForms();
                     break;
+                case "lc":
+                    await listFields();
+                    break;
                 case "df":
                     await deleteForm();
                     break;
-                case "cc":
+                case "dc":
+                    await deleteField();
+                    break;
                 case "cr":
-                case "ec":
                 case "er":
                 case "nf":
                 case "nc":
                 case "nr":
-                case "lc":
                 case "lr":
-                case "dc":
                 case "dr":
                     console.log("TODO: implement this command");
                     break;
