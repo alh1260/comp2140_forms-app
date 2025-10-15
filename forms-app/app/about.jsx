@@ -1,5 +1,5 @@
 import {Text, View} from "react-native";
-import {Text as RNPText} from "react-native-paper";
+import {Text as RNPText, Card} from "react-native-paper";
 
 function About()
 {
@@ -11,7 +11,16 @@ function About()
              alignItems: "center"
          }}>
             <RNPText variant="titleLarge">About</RNPText>
-            <Text>An example forms app</Text>
+            <Text>FormBase is an app that lets you create and fill out forms</Text>
+            <Card>
+                <Card.Title title="Features" />
+                <Card.Content>
+                    <Text>- Create and edit forms with a variety of field types</Text>
+                    <Text>- Fill out forms on your phone</Text>
+                    <Text>- View/search for responses with filters</Text>
+                    <Text>- View location data on a map</Text>
+                </Card.Content>
+            </Card>
         </View>
     );
 }
