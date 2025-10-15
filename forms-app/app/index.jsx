@@ -1,4 +1,5 @@
 import {Text, View} from "react-native";
+import {Text as RNPText} from "react-native-paper";
 
 function Index()
 {
@@ -9,7 +10,7 @@ function Index()
              justifyContent: "center",
              alignItems: "center"
          }}>
-            <Text>Welcome to FormBase!</Text>
+            <RNPText variant="titleLarge">Welcome to FormBase!</RNPText>
             <Text>TODO: Put in some graphics on the home screen</Text>
         </View>
     );

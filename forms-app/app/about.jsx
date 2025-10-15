@@ -1,4 +1,5 @@
 import {Text, View} from "react-native";
+import {Text as RNPText} from "react-native-paper";
 
 function About()
 {
@@ -9,7 +10,7 @@ function About()
              justifyContent: "center",
              alignItems: "center"
          }}>
-            <Text>About</Text>
+            <RNPText variant="titleLarge">About</RNPText>
             <Text>An example forms app</Text>
         </View>
     );
