@@ -28,7 +28,7 @@ function AddEditForm(props)
 	    // TODO: change the endpoint depending whether we're creating a new form or updating,
 	    // and the HTTP method
             await apiRequest("/form", "POST", {name: formName, description: desc});
-	    router.dismissTo("myforms");
+            router.dismissTo("myforms");
         }
         catch (error) {
             setErr(true);
