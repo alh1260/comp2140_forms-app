@@ -1,4 +1,5 @@
-import {useState, useEffect} from "react";
+import {useState, useCallback} from "react";
+import {useFocusEffect} from "expo-router";
 import {ActivityIndicator, View, ScrollView} from "react-native";
 import {Text, Card} from "react-native-paper";
 import FormListItemCard from "../../components/FormListItemCard";
@@ -35,7 +36,12 @@ function MyForms()
         }
     };
 
-    useEffect(() => {getForms();}, []);
+    //useEffect(() => {getForms();}, []);
+    useFocusEffect(useCallback(
+            () => {
+                getForms();
+                return () => {setLoading(true);};
+            }, []));
 
     return (
         <View>
