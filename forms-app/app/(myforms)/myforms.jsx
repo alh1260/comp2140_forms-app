@@ -1,7 +1,7 @@
 import {useState, useCallback} from "react";
-import {useFocusEffect} from "expo-router";
+import {useRouter, useFocusEffect} from "expo-router";
 import {ActivityIndicator, View, ScrollView} from "react-native";
-import {Text, Card} from "react-native-paper";
+import {Button, Card, Text} from "react-native-paper";
 import FormListItemCard from "../../components/FormListItemCard";
 import {apiRequest} from "../../api/crud.js";
 
@@ -18,6 +18,7 @@ function ItemErrorCard()
 
 function MyForms()
 {
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const [errState, setErrState] = useState(false);
@@ -36,7 +37,6 @@ function MyForms()
         }
     };
 
-    //useEffect(() => {getForms();}, []);
     useFocusEffect(useCallback(
             () => {
                 getForms();
@@ -45,6 +45,10 @@ function MyForms()
 
     return (
         <View>
+            <Button
+             mode="contained"
+             icon="plus"
+             onPress={() => router.push("addform")}>Add Form</Button>
             {loading ?
                     (<ActivityIndicator />) :
                     (errState ?
