@@ -37,6 +37,17 @@ function MyForms()
         }
     };
 
+    const deleteForm = async function(formId)
+    {
+        try {
+            const res = await apiRequest(`/form?id=eq.${formId}`, "DELETE");
+            router.replace("myforms");
+        }
+        catch (err) {
+            setErrState(true);
+        }
+    };
+
     useFocusEffect(useCallback(
             () => {
                 getForms();
@@ -55,7 +66,11 @@ function MyForms()
                             (<ItemErrorCard />) :
                             (<ScrollView>
                                 {data.map(frm => (
-                                    <FormListItemCard key={frm.id} title={frm.name} description={frm.description} />
+                                    <FormListItemCard
+                                     key={frm.id}
+                                     title={frm.name}
+                                     description={frm.description}
+                                     deleteAction={() => deleteForm(frm.id)}/>
                                 ))}
                             </ScrollView>) 
                     )}
