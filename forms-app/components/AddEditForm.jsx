@@ -27,10 +27,17 @@ function AddEditForm(props)
             }
 	    // TODO: change the endpoint depending whether we're creating a new form or updating,
 	    // and the HTTP method
-            await apiRequest("/form", "POST", {name: formName, description: desc});
+            if (!props.intId) { // should be creating a new form
+                await apiRequest("/form", "POST", {name: formName, description: desc});
+            }
+            else { // update form
+                await apiRequest(`/form?id=eq.${props.intId}`, "PATCH", {name: formName, description: desc});
+            }
             router.dismissTo("myforms");
         }
         catch (error) {
+            console.log("Error submitting data from 'AddEditForm.jsx':");
+            console.log(error);
             setErr(true);
         }
     };

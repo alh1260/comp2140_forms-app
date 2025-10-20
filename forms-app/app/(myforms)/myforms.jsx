@@ -30,6 +30,8 @@ function MyForms()
 	    setData(res);
         }
         catch (err) {
+            console.log("Error fetching form data from 'myforms.jsx': ");
+            console.log(err);
             setErrState(true);
         } 
         finally {
@@ -44,6 +46,8 @@ function MyForms()
             router.replace("myforms");
         }
         catch (err) {
+            console.log("Error deleting form from 'myforms.jsx':");
+            console.log(err);
             setErrState(true);
         }
     };
@@ -70,6 +74,7 @@ function MyForms()
                                      key={frm.id}
                                      title={frm.name}
                                      description={frm.description}
+                                     editAction={() => router.push(`editform/${frm.id}`)}
                                      deleteAction={() => deleteForm(frm.id)}/>
                                 ))}
                             </ScrollView>) 

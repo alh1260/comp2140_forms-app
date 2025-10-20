@@ -7,6 +7,7 @@ function FormsLayout()
         <Stack screenOptions={{headerLeft: () => (<DrawerToggleButton />)}}>
             <Stack.Screen name="myforms" options={{title: "My Forms"}} />
             <Stack.Screen name="addform" options={{title: "Add Form"}} />
+            <Stack.Screen name="editform/[id]" options={{title: "Edit Form"}} />
         </Stack>
     );
 }
