@@ -193,7 +193,7 @@ function makeEditFieldHelper(curField)
     if (!curField) { // creating new field
         const nuName = getTextData("Field name", "Foo");
         const nuType = getFieldType("text");
-        const nuOpts = (nuType === "dropdown") ? getDDOptions() : null;
+        const nuOpts = (nuType === "dropdown") ? {"nameofdropdown": getDDOptions()} : null;
         const isReqd = getBoolData("Required field [true | false]?", true);
         const isNum = getBoolData("Is numeric [true | false]?", false);
         const ordIdx = getIntData("Order index", 1);
@@ -211,7 +211,7 @@ function makeEditFieldHelper(curField)
     else { // editing
         const nuName = getTextData("Field name", curField.name);
         const nuType = getFieldType(curField.field_type);
-        const nuOpts = (nuType === "dropdown") ? getDDOptions() : null;
+        const nuOpts = (nuType === "dropdown") ? {"nameofdropdown": getDDOptions()} : null;
         const isReqd = getBoolData("Required field [true | false]?", curField.required);
         const isNum = getBoolData("Is numeric [true | false]?", curField.is_num);
         const ordIdx = getIntData("Order index", curField.order_index);
@@ -427,7 +427,8 @@ async function listFields()
     else {
         const fId = Number(fIdStr);
         const res = await getFields(fId);
-        console.log(`Fields for form ${fId}:`, res);
+        console.log(`Fields for form ${fId}:`);
+	console.dir(res, {depth: 5});
     }
 }
 
