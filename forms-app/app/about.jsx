@@ -21,6 +21,15 @@ function About()
                     <Text>- View location data on a map</Text>
                 </Card.Content>
             </Card>
+            <Card>
+                <Card.Title title="Powered by" />
+                <Card.Content>
+                    <Text>- React Native + Expo</Text>
+                    <Text>- PostgREST + PostgreSQL on the back-end</Text>
+                    <Text>- React Native Paper for the UI and widgets</Text>
+                    <Text>- React Native Maps for the map functionality</Text>
+                </Card.Content>
+            </Card>
         </View>
     );
 }

@@ -1,7 +1,7 @@
 import {Button, Card, Text} from "react-native-paper";
 import {View} from "react-native";
 
-function FormListItemCard({title, description , editAction /*, viewAction */, deleteAction})
+function FormListItemCard({title, description , editAction , viewAction, deleteAction})
 {
     return (
         <Card>
@@ -15,7 +15,8 @@ function FormListItemCard({title, description , editAction /*, viewAction */, de
                  icon="eye-outline"
                  mode="contained"
                  buttonColor="#00F"
-                 compact="true">
+                 compact="true"
+                 onPress={viewAction}>
                     View
                 </Button>
                 <Button

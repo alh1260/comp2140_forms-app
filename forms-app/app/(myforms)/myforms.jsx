@@ -75,6 +75,7 @@ function MyForms()
                                      title={frm.name}
                                      description={frm.description}
                                      editAction={() => router.push(`editform/${frm.id}`)}
+                                     viewAction={() => router.push(`viewform/${frm.id}/form`)}
                                      deleteAction={() => deleteForm(frm.id)}/>
                                 ))}
                             </ScrollView>) 
