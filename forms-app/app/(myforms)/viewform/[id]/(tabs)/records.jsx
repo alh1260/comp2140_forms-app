@@ -33,7 +33,8 @@ function Records()
     {
         try {
             const res = await apiRequest(`/record?id=eq.${recId}`, "DELETE");
-            router.replace(`/viewform/${id}/records`);
+            setLoading(true);
+            await getRecords();
         }
         catch (error) {
             console.log("Error deleting record from 'viewform/[id]/records.jsx':");
