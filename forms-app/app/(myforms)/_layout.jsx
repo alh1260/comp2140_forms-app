@@ -4,10 +4,33 @@ import {DrawerToggleButton} from "@react-navigation/drawer";
 function FormsLayout()
 {
     return (
-        <Stack screenOptions={{headerLeft: () => (<DrawerToggleButton />)}}>
-            <Stack.Screen name="myforms" options={{title: "My Forms"}} />
-            <Stack.Screen name="addform" options={{title: "Add Form"}} />
-            <Stack.Screen name="editform/[id]" options={{title: "Edit Form"}} />
+        <Stack 
+         screenOptions={
+                {
+                    headerLeft: () => (<DrawerToggleButton />),
+                    headerShown: false
+                }}>
+            <Stack.Screen
+             name="myforms"
+             options={
+                    {
+                        title: "My Forms",
+                        headerShown: true
+                    }} />
+            <Stack.Screen
+             name="addform"
+             options={
+                    {
+                        title: "Add Form",
+                        headerShown: true
+                    }} />
+            <Stack.Screen
+             name="editform/[id]"
+             options={
+                    {
+                        title: "Edit Form",
+                        headerShown: true
+                    }} />
         </Stack>
     );
 }
