@@ -432,15 +432,15 @@ async function listFields()
     }
 }
 
-async function getApplicants(intId)
+async function getRecords(fId)
 {
-    const res = await apiRequest(`/applicant?interview_id=eq.${intId}`);
+    const res = await apiRequest(`/record?form_id=eq.${fId}`);
     return res.json();
 }
 
-async function getApplicant(id)
+async function getRecord(id)
 {
-    const res = await apiRequest(`/applicant?id=eq.${id}`);
+    const res = await apiRequest(`/record?id=eq.${id}`);
     return res.json().then(r => r[0]);
 }
 
@@ -458,18 +458,18 @@ async function getAppCount()
     }
 }
 
-async function listApplicants()
+async function listRecords()
 {
-    console.log("List applicants");
-    const intIdStr = getIntID();
-    if (intIdStr === "") {
-        console.log("No Interview ID specified");
+    console.log("List records");
+    const fIdStr = getID("Form ID");
+    if (fIdStr === "") {
+        console.log("No Form ID specified");
         return;
     }
     else {
-        const intId = Number(intIdStr);
-        const res = await getApplicants(intId);
-        console.log(`Applicants for interview ${intId}:`, res);
+        const fId = Number(fIdStr);
+        const res = await getRecords(fId);
+        console.log(`Records for form ${fId}:`, res);
     }
 }
 
@@ -632,6 +632,9 @@ async function main()
                 case "lc":
                     await listFields();
                     break;
+                case "lr":
+                    await listRecords();
+                    break;
                 case "df":
                     await deleteForm();
                     break;
@@ -643,7 +646,6 @@ async function main()
                 case "nf":
                 case "nc":
                 case "nr":
-                case "lr":
                 case "dr":
                     console.log("TODO: implement this command");
                     break;
