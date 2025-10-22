@@ -43,7 +43,8 @@ function MyForms()
     {
         try {
             const res = await apiRequest(`/form?id=eq.${formId}`, "DELETE");
-            router.replace("myforms");
+            setLoading(true);
+            await getForms();
         }
         catch (err) {
             console.log("Error deleting form from 'myforms.jsx':");
