@@ -1,24 +1,10 @@
 import {useCallback, useState} from "react";
 import {ActivityIndicator, ScrollView, View} from "react-native";
-import {Text, TextInput} from "react-native-paper";
+import {Button, HelperText, Text, TextInput} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import {apiRequest} from "../../../../../api/crud.js";
 
-/*
- * Idea on how to deal with record state:
- *
- * set it as an Object, I.e.
- *     const [rec, setRec] = useState({});
- * 
- * then to update the state, we use Object.defineProperty
- *     setRec(Object.defineProperty({...rec}, prop, {
- *                         value: <new value>,
- *                         writable: true,
- *                         enumerable: true,
- *                         configurable: true
- *                     }));
- */
 
 function FormInput(props)
 {
@@ -71,29 +57,50 @@ function ViewForm()
     const {id} = useLocalSearchParams();
     const [loading, setLoading] = useState(true);
     const [fields, setFields] = useState([]);
-    const [err, setErr] = useState(false);
+    const [fetchErr, setFetchErr] = useState(false);
+    const [subErr, setSubErr] = useState(false);
     const [rec, setRec] = useState({});
+    const [savingRec, setSavingRec] = useState(false);
 
     const getFields = async function()
     {
-        try{
+        try {
             const res = await apiRequest(`/field?form_id=eq.${id}`).then(r => r.json());
             setFields(res);
         }
         catch (error) {
             console.log("Error fetching form data from 'viewform/[id]/form.jsx': ");
             console.log(error);
-            setErr(true);
+            setFetchErr(true);
         }
         finally {
             setLoading(false);
 	}
     };
 
+    const submitRecord = async function()
+    {
+        try {
+	    setSavingRec(true);
+            if (subErr) {
+                setSubErr(false);
+            }
+            await apiRequest("/record", "POST", {form_id: id, values: rec});
+        }
+        catch (error) {
+            console.log("Error submitting record from 'viewform/[id]/form.jsx'");
+            console.log(error);
+            setSubErr(true);
+        }
+        finally {
+            setSavingRec(false);
+        }
+    };
+
     useFocusEffect(useCallback(
             () => {
                 getFields();
-                return () => {setLoading(true);};
+                return () => {setLoading(true); setSubErr(false);};
             }, []));
 
     return (
@@ -101,7 +108,7 @@ function ViewForm()
             <Text>TODO: Put the forms view here!</Text>
             {loading ?
             (<ActivityIndicator />):
-                (err ? 
+                (fetchErr ? 
                 <Text>Oops! Something went wrong.</Text> :
                 <ScrollView>
                     {fields.map(fld => (
@@ -111,6 +118,14 @@ function ViewForm()
                          value={rec[fld.name] ?? ""}
                          setterFn={val => setRec({...rec, [fld.name]: val})} />
                     ))}
+                    <Button
+                     mode="contained"
+                     icon="content-save-outline"
+                     disabled={savingRec}
+                     onPress={() => submitRecord()}>
+                        {savingRec ? (<ActivityIndicator />) : <Text>Add Record</Text>}
+                    </Button>
+                    <HelperText type="error" visible={subErr}>There was an error submitting the record</HelperText>
                 </ScrollView>)}
         </View>
     );
