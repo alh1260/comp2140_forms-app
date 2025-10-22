@@ -337,18 +337,18 @@ async function deleteField()
     }
 }
 
-async function deleteApplicant()
+async function deleteRecord()
 {
-    console.log("Delete applicant");
-    const idStr = getAppID();
+    console.log("Delete record");
+    const idStr = getID("Record Id");
     if (idStr === "") {
         console.log("No ID specified");
         return;
     }
     else {
         const id = Number(idStr);
-        const res = await apiRequest(`/applicant?id=eq.${id}`, "DELETE");
-        console.log("Deleted applicant", res);
+        const res = await apiRequest(`/record?id=eq.${id}`, "DELETE");
+        console.log("Deleted record", res);
         return;
     }
 }
@@ -641,12 +641,14 @@ async function main()
                 case "dc":
                     await deleteField();
                     break;
+                case "dr":
+                    await deleteRecord();
+                    break;
                 case "cr":
                 case "er":
                 case "nf":
                 case "nc":
                 case "nr":
-                case "dr":
                     console.log("TODO: implement this command");
                     break;
                 case "q":
