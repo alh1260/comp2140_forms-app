@@ -105,28 +105,27 @@ function ViewForm()
 
     return (
         <View>
-            <Text>TODO: Put the forms view here!</Text>
             {loading ?
-            (<ActivityIndicator />):
+                (<ActivityIndicator />):
                 (fetchErr ? 
-                <Text>Oops! Something went wrong.</Text> :
-                <ScrollView>
-                    {fields.map(fld => (
-                        <FormInput
-                         key={fld.id}
-                         field={fld}
-                         value={rec[fld.name] ?? ""}
-                         setterFn={val => setRec({...rec, [fld.name]: val})} />
-                    ))}
-                    <Button
-                     mode="contained"
-                     icon="content-save-outline"
-                     disabled={savingRec}
-                     onPress={() => submitRecord()}>
-                        {savingRec ? (<ActivityIndicator />) : <Text>Add Record</Text>}
-                    </Button>
-                    <HelperText type="error" visible={subErr}>There was an error submitting the record</HelperText>
-                </ScrollView>)}
+                    <Text>Oops! Something went wrong.</Text> :
+                    <ScrollView>
+                        {fields.map(fld => (
+                            <FormInput
+                             key={fld.id}
+                             field={fld}
+                             value={rec[fld.name] ?? ""}
+                             setterFn={val => setRec({...rec, [fld.name]: val})} />
+                        ))}
+                        <Button
+                         mode="contained"
+                         icon="content-save-outline"
+                         disabled={savingRec}
+                         onPress={() => submitRecord()}>
+                            {savingRec ? (<ActivityIndicator />) : <Text>Add Record</Text>}
+                        </Button>
+                        <HelperText type="error" visible={subErr}>There was an error submitting the record</HelperText>
+                    </ScrollView>)}
         </View>
     );
 }
