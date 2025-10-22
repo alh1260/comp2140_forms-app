@@ -18,7 +18,7 @@ function FormInput(props)
                  value={props.value}
                  onChangeText={props.setterFn} />
             );
-	    break;
+            break;
         case "mulitline":
             formInput = (
                 <TextInput
@@ -28,7 +28,7 @@ function FormInput(props)
                  onChangeText={props.setterFn}
                  multiline />
             );
-	    break;
+            break;
         case "dropdown":
             formInput = (
                 <Picker
@@ -75,13 +75,13 @@ function ViewForm()
         }
         finally {
             setLoading(false);
-	}
+        }
     };
 
     const submitRecord = async function()
     {
         try {
-	    setSavingRec(true);
+            setSavingRec(true);
             if (subErr) {
                 setSubErr(false);
             }

@@ -27,7 +27,7 @@ function MyForms()
     {
         try {
             const res = await apiRequest("/form").then(r => r.json());
-	    setData(res);
+            setData(res);
         }
         catch (err) {
             console.log("Error fetching form data from 'myforms.jsx': ");

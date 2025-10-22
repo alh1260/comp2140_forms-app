@@ -30,7 +30,7 @@ function EditForm()
     useFocusEffect(useCallback(
             () => {
                 getForm();
-		return () => {setLoading(true);};
+                return () => {setLoading(true);};
             }, []));
 
     return (

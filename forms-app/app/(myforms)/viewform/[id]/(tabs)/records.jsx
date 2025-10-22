@@ -26,12 +26,12 @@ function Records()
         }
         finally {
             setLoading(false);
-	}
+        }
     };
 
     const deleteRecord = async function(recId)
     {
-	try {
+        try {
             const res = await apiRequest(`/record?id=eq.${recId}`, "DELETE");
             router.replace(`/viewform/${id}/records`);
         }
@@ -53,7 +53,7 @@ function Records()
             {loading ?
                 (<ActivityIndicator />) :
                 (err ?
-		    <Text>Oops! Something went wrong</Text> :
+                    <Text>Oops! Something went wrong</Text> :
                     (recs.map(rec => (
                         <RecordListItemCard
                          key={rec.id}
