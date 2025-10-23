@@ -8,6 +8,9 @@ import {apiRequest} from "../../../../../api/crud.js";
 
 function FormInput(props)
 {
+    const isMandatory = props.field.required;
+    const isNumeric = props.field.is_num;
+
     let formInput;
     switch (props.field.field_type) {
         case "text":
@@ -48,6 +51,14 @@ function FormInput(props)
     return (
         <>
             {formInput}
+	    {isMandatory &&
+                    <HelperText type="error" visible={isMandatory}>
+                        This field is required
+                    </HelperText>}
+            {isNumeric &&
+                    <HelperText type="info" visible={isNumeric}>
+                        Numeric field
+                    </HelperText>}
         </>
     );
 }
@@ -59,6 +70,7 @@ function ViewForm()
     const [fields, setFields] = useState([]);
     const [fetchErr, setFetchErr] = useState(false);
     const [subErr, setSubErr] = useState(false);
+    //const [constraintViolation, setConstraintViolation] = useState(false);
     const [rec, setRec] = useState({});
     const [savingRec, setSavingRec] = useState(false);
 
@@ -115,7 +127,7 @@ function ViewForm()
                              key={fld.id}
                              field={fld}
                              value={rec[fld.name] ?? ""}
-                             setterFn={val => setRec({...rec, [fld.name]: val})} />
+                             setterFn={(val) => setRec({...rec, [fld.name]: val})} />
                         ))}
                         <Button
                          mode="contained"
