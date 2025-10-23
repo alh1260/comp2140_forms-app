@@ -23,7 +23,7 @@ function FormInput(props)
                  onChangeText={props.setterFn} />
             );
             break;
-        case "mulitline":
+        case "multiline":
             formInput = (
                 <TextInput
                  mode="outlined"
@@ -70,6 +70,7 @@ function ViewForm()
     const {id} = useLocalSearchParams();
     const [loading, setLoading] = useState(true);
     const [fields, setFields] = useState([]);
+    const [curIdx, setIdx] = useState(0);
     const [fetchErr, setFetchErr] = useState(false);
     const [subErr, setSubErr] = useState(false);
     //const [constraintViolation, setConstraintViolation] = useState(false);
@@ -80,7 +81,9 @@ function ViewForm()
     {
         try {
             const res = await apiRequest(`/field?form_id=eq.${id}`).then(r => r.json());
-            setFields(res);
+            const resArr = Array.from(res).sort((a, b) => a.order_index - b.order_index);
+            setFields(resArr);
+            setIdx((resArr.length === 0) ? 0 : resArr[resArr.length - 1].order_index);
         }
         catch (error) {
             console.log("Error fetching form data from 'viewform/[id]/form.jsx': ");
@@ -90,6 +93,12 @@ function ViewForm()
         finally {
             setLoading(false);
         }
+    };
+
+    const refreshFields = async function()
+    {
+        setLoading(true);
+        await getFields();
     };
 
     const submitRecord = async function()
@@ -124,7 +133,7 @@ function ViewForm()
                 (fetchErr ? 
                     <Text>Oops! Something went wrong.</Text> :
                     <ScrollView>
-                        <AddField />
+                        <AddField fId={id} orderIndex={curIdx + 1} onSubmit={() => refreshFields()} />
                         {fields.map(fld => (
                             <FormInput
                              key={fld.id}
