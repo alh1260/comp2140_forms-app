@@ -3,6 +3,7 @@ import {ActivityIndicator, ScrollView, View} from "react-native";
 import {Button, HelperText, Text, TextInput} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
+import AddField from "../../../../../components/AddField";
 import {apiRequest} from "../../../../../api/crud.js";
 
 
@@ -36,6 +37,7 @@ function FormInput(props)
             formInput = (
                 <Picker
                  selectedValue={props.value}
+                 style={{backgroundColor: "#FFFBFE"}}
                  onValueChange={(val, idx) => props.setterFn(val)}>
                     {props.field.options.nameofdropdown.map((opt, idx) => (
                         <Picker.Item key={`${props.field.id}_${idx}`} label={opt} value={opt} />
@@ -122,6 +124,7 @@ function ViewForm()
                 (fetchErr ? 
                     <Text>Oops! Something went wrong.</Text> :
                     <ScrollView>
+                        <AddField />
                         {fields.map(fld => (
                             <FormInput
                              key={fld.id}
