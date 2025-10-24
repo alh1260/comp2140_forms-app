@@ -5,6 +5,7 @@ import {Picker} from "@react-native-picker/picker";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import AddField from "../../../../../components/AddField";
 import LocationInput from "../../../../../components/LocationInput";
+import ImageInput from "../../../../../components/ImageInput";
 import {apiRequest} from "../../../../../api/crud.js";
 
 
@@ -54,6 +55,8 @@ function FormInput(props)
             );
             break;
         case "image":
+            formInput = (<ImageInput onGetImage={props.setterFn} />);
+            break;
         default:
             formInput = (<Text>Unsupported input type</Text>);
     }
@@ -61,7 +64,7 @@ function FormInput(props)
     return (
         <>
             {formInput}
-	    {isMandatory &&
+            {isMandatory &&
                     <HelperText type="error" visible={isMandatory}>
                         This field is required
                     </HelperText>}

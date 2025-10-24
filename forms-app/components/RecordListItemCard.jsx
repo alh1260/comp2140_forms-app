@@ -1,15 +1,22 @@
 import {Button, Card, Text} from "react-native-paper";
-import {View} from "react-native";
+import {Image, View, useWindowDimensions} from "react-native";
 import * as Clipboard from "expo-clipboard";
 
 function RecordListItemCard({record, fieldData, deleteAction})
 {
+    const {height, width} = useWindowDimensions();
+
     const prettyPrintRecordData = function(data, fieldData)
     {
+        if (!data || !fieldData) {
+            return (<Text>Something went wrong!</Text>);
+        }
         switch (fieldData.field_type) {
             case "location":
                 return (<Text variant="bodyMedium">{JSON.stringify(data)}</Text>);
-	    case "text":
+            case "image":
+                return (<Image height={height/2} width={width/2} source={{uri: data}} />);
+            case "text":
             case "multiline":
             case "dropdown":
             default:

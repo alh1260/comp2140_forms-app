@@ -1,6 +1,6 @@
 import {useCallback, useState} from "react";
 import {useFocusEffect, useRouter, useGlobalSearchParams} from "expo-router";
-import {ActivityIndicator, View} from "react-native";
+import {ActivityIndicator, ScrollView} from "react-native";
 import {Text} from "react-native-paper";
 import RecordListItemCard from "../../../../../components/RecordListItemCard";
 import {apiRequest} from "../../../../../api/crud.js";
@@ -11,7 +11,7 @@ function Records()
     const router = useRouter();
     const [recs, setRecs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [fields, setFields] = useState({});
+    const [fields, setFields] = useState([]);
     const [err, setErr] = useState(false);
 
     const getRecords = async function()
@@ -69,7 +69,7 @@ function Records()
             }, []));
 
     return (
-        <View>
+        <ScrollView>
             {loading ?
                 (<ActivityIndicator />) :
                 (err ?
@@ -81,7 +81,7 @@ function Records()
                          fieldData={fields}
                          deleteAction={() => deleteRecord(rec.id)}/>
                     ))))}
-        </View>
+        </ScrollView>
     );
 }
 
