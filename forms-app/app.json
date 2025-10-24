@@ -8,6 +8,7 @@
     "scheme": "formsapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "permissions": ["LOCATION"],
     "ios": {
       "supportsTablet": true
     },

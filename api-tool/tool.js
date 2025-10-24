@@ -168,7 +168,8 @@ function makeEditFieldHelper(curField)
                 "1 - text\n" +
                 "2 - multiline\n" +
                 "3 - dropdown\n" +
-                "4 - location";
+                "4 - location\n" +
+                "5 - image";
 	console.log(typePrompt);
 	const opt = prompt(`selection? (default ${curOpt}) `, curOpt);
         switch(opt) {
@@ -178,6 +179,8 @@ function makeEditFieldHelper(curField)
                 return "dropdown";
             case '4':
                 return "location";
+            case '5':
+                return "image";
             case '1':
             default:
                 return "text";
@@ -469,7 +472,8 @@ async function listRecords()
     else {
         const fId = Number(fIdStr);
         const res = await getRecords(fId);
-        console.log(`Records for form ${fId}:`, res);
+        console.log(`Records for form ${fId}:`);
+	console.dir(res, {depth: 5});
     }
 }
 

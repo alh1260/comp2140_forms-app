@@ -11,6 +11,7 @@ function Records()
     const router = useRouter();
     const [recs, setRecs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [fields, setFields] = useState({});
     const [err, setErr] = useState(false);
 
     const getRecords = async function()
@@ -21,6 +22,23 @@ function Records()
         }
         catch (error) {
             console.log("Error fetching form data from 'viewform/[id]/records.jsx': ");
+            console.log(error);
+            setErr(true);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+
+    const getFields = async function()
+    {
+        try {
+            const res = await apiRequest(`/field?form_id=eq.${id}`).then(r => r.json());
+            const resArr = Array.from(res).sort((a, b) => a.order_index - b.order_index);
+            setFields(resArr);
+        }
+        catch (error) {
+            console.log("Error fetching fields from 'viewform/[id]/records.jsx': ");
             console.log(error);
             setErr(true);
         }
@@ -45,6 +63,7 @@ function Records()
 
     useFocusEffect(useCallback(
             () => {
+                getFields();
                 getRecords();
                 return () => {setLoading(true);};
             }, []));
@@ -59,6 +78,7 @@ function Records()
                         <RecordListItemCard
                          key={rec.id}
                          record={rec}
+                         fieldData={fields}
                          deleteAction={() => deleteRecord(rec.id)}/>
                     ))))}
         </View>

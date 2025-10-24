@@ -77,6 +77,8 @@ function AddField({fId, orderIndex, onSubmit})
                                          <Picker.Item label="Text" value="text" />
                                          <Picker.Item label="Multi-line Text" value="multiline" />
                                          <Picker.Item label="Drop-down" value="dropdown" />
+                                         <Picker.Item label="Location" value="location" />
+                                         <Picker.Item label="Image" value="image" />
                                      </Picker>
                                      {(fldType === "dropdown") &&
                                              (<View>
@@ -93,7 +95,7 @@ function AddField({fId, orderIndex, onSubmit})
                                                       <View
                                                        key={`dd_${idx}`}
                                                        style={{flexDirection:"row"}}>
-                                                          <Text variant="labelLarge">{`${idx}`}</Text>
+                                                          <Text variant="labelLarge">{`${idx}: `}</Text>
                                                           <Text variant="bodyMedium">{opt}</Text>
                                                       </View>
                                                   ))}

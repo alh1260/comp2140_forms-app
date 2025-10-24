@@ -4,6 +4,7 @@ import {Button, HelperText, Text, TextInput} from "react-native-paper";
 import {Picker} from "@react-native-picker/picker";
 import {useFocusEffect, useLocalSearchParams} from "expo-router";
 import AddField from "../../../../../components/AddField";
+import LocationInput from "../../../../../components/LocationInput";
 import {apiRequest} from "../../../../../api/crud.js";
 
 
@@ -46,6 +47,13 @@ function FormInput(props)
             );
             break;
         case "location":
+            formInput = (
+                <LocationInput
+                 currentLocation={(props.value === "") ? null : props.value}
+                 onLocationFetch={props.setterFn} />
+            );
+            break;
+        case "image":
         default:
             formInput = (<Text>Unsupported input type</Text>);
     }
