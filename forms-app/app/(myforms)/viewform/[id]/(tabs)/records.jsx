@@ -21,7 +21,7 @@ function Records()
             setRecs(res);
         }
         catch (error) {
-            console.log("Error fetching form data from 'viewform/[id]/records.jsx': ");
+            console.log("Error fetching record data from 'viewform/[id]/records.jsx': ");
             console.log(error);
             setErr(true);
         }

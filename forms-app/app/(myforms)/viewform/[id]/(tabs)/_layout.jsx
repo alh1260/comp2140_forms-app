@@ -28,6 +28,17 @@ function FormViewLayout()
                                  color={opts.color}
                                  size={opts.size} />)
                     }} />
+            <Tabs.Screen
+             name="mapscreen"
+             options={
+                    {
+                        title: "Map",
+                        tabBarIcon: (opts) => (
+                                <Icon
+                                 source="map"
+                                 color={opts.color}
+                                 size={opts.size} />)
+                    }} />
         </Tabs>
     );
 }

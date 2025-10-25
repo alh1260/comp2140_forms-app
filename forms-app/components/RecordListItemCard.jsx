@@ -40,7 +40,7 @@ function RecordListItemCard({record, fieldData, deleteAction})
                     </View>
                 ))}
             </Card.Content>
-            <Card.Actions>
+            {Boolean(deleteAction) && (<Card.Actions>
                 <Button
                  icon="file-document-edit-outline"
                  mode="outlined"
@@ -56,7 +56,7 @@ function RecordListItemCard({record, fieldData, deleteAction})
                  onPress={deleteAction}>
                     Delete
                 </Button>
-            </Card.Actions>
+            </Card.Actions>)}
         </Card>
     );
 }
